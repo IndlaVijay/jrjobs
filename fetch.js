@@ -6,7 +6,7 @@ let filteredJobs = [];
 // Fetch job data
 async function fetchJobs() {
     try {
-        const response = await fetch('https://indlavijay.github.io/jrjobs/db.json');
+        const response = await fetch('https://1drv.ms/u/s!Ag-2iEGfH_Uggb9ohnOr0d0TwrCmAg?e=rYC3FB');
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
         allJobs = await response.json();
