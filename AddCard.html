@@ -96,7 +96,7 @@
 
       try {
         // Send POST request to the backend
-        const response = await fetch("db.json/jobs", {
+        const response = await fetch("https://indlavijay.github.io/jrjobs/db.json", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(jobData),
