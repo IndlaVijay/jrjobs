@@ -19,7 +19,7 @@
 
     <div id="image" class="container header d-flex align-items-center justify-content-center"
         style="background-image: linear-gradient(rgba(241, 154, 60, 0.5), rgba(54, 139, 102, 0.5)), url('');">
-        <h1  class="fw-bold text-white"><span id="jobTitle"></span> From <span id="companyName"></span></h1>
+        <h1  class="fw-bold text-white"><span id="jobTitleHeader"></span> From <span id="companyName"></span></h1>
     </div>
 
     <div class="container shadow my-4 p-4" id="applyNow">
@@ -95,6 +95,7 @@
 
                 // Ensure data is assigned only if available
                 document.getElementById("jobTitle").innerText = job.role || "N/A";
+                document.getElementById("jobTitleHeader").innerText = job.role || "No Details";
                 document.getElementById("companyName").innerText = job.company || "Unknown Company";
                 document.getElementById("jobType").innerText = job.type || "Not specified";
                 document.getElementById("experience").innerText = job.experience || "N/A";
