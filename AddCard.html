@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add User</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container shadow d-flex flex-wrap justify-content-center mt-5">
+    <button type="button" class="btn btn-primary m-5 shadow" data-bs-toggle="modal" data-bs-target="#addNewJobModal">
+      ADD NEW JOB
+    </button>
+
+    <!-- Modal -->
+    <div class="modal modal-xl fade" id="addNewJobModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5 fw-bold" id="staticBackdropLabel">Add New Job</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Form -->
+            <form id="addUserForm" onsubmit="addUser(event)">
+              <div class="mb-3">
+                <label for="role" class="form-label">Job Role:</label>
+                <input type="text" class="form-control" name="role" placeholder="Enter job role" required>
+              </div>
+              <div class="mb-3">
+                <label for="company" class="form-label">Company Name:</label>
+                <input type="text" class="form-control" name="company" placeholder="Enter company name" required>
+              </div>
+              <div class="mb-3">
+                <label for="location" class="form-label">Job Location:</label>
+                <input type="text" class="form-control" name="location" placeholder="Enter job location" required>
+              </div>
+              <div class="mb-3">
+                <label for="date" class="form-label">Post Date:</label>
+                <input type="date" class="form-control" name="date" required>
+              </div>
+              <div class="mb-3">
+                <label for="image" class="form-label">Image URL:</label>
+                <input type="url" class="form-control" name="image" placeholder="Enter image URL" required>
+              </div>
+              <hr>
+              <div class="mb-3">
+                <label for="responsibilities" class="form-label">Responsibilities:</label>
+                <textarea type="text" rows="5" class="form-control" name="responsibilities" placeholder="Separate responsibilities with $" required></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="requirements" class="form-label">Requirements:</label>
+                <textarea type="text" rows="5" class="form-control " name="requirements" placeholder="Separate requirements with $" required></textarea>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary w-50">Add Job</button>
+              </div>
+            </form>
+            <!-- End Form -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Format date to a readable format (e.g., DD/MM/YYYY)
+    function formatDate(date) {
+      const options = { year: 'numeric', month: 'long', day: '2-digit' };
+      return new Date(date).toLocaleDateString('en-GB', options);
+    }
+
+    // Add a new job
+    async function addUser(event) {
+      event.preventDefault(); // Prevent form from reloading the page
+
+      // Gather form data
+      const formData = new FormData(event.target);
+
+      // Format the date
+      const formattedDate = formatDate(formData.get("date"));
+
+      // Create the job data object
+      const jobData = {
+        role: formData.get("role"),
+        company: formData.get("company"),
+        location: formData.get("location"),
+        date: formattedDate,
+        image: formData.get("image"),
+        responsibilities: formData.get("responsibilities").split('$').map(item => item.trim()),
+        requirements: formData.get("requirements").split('$').map(item => item.trim()),
+      };
+
+      try {
+        // Send POST request to the backend
+        const response = await fetch("http://localhost:3000/jobs", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(jobData),
+        });
+
+        if (response.ok) {
+          alert("Job added successfully!");
+          event.target.reset(); // Reset the form
+          const modal = bootstrap.Modal.getInstance(document.getElementById("addNewJobModal"));
+          modal.hide(); // Close the modal
+        } else {
+          throw new Error(errorData.message || "Failed to add job. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert(error.message);
+        errorMessage.style.color = "red"; // Set red color
+        errorMessage.style.display = "block"; // Show error
+      }
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
+
+</html>
